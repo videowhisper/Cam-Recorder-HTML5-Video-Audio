@@ -1,6 +1,6 @@
 ## Cam-Recorder-HTML5-Video-Audio : Video/Audio Recorder Camera/Microphone HTML5 - Standalone PHP
 
-[Live Demo: Cam/Mic Video/Audio Recorder HTML5 - Plain PHP](https://demo.videowhisper.com/cam-recorder-html5-video-audio/)
+[Live Demo: Cam/Mic Video/Audio Recorder HTML5 - Standalone PHP](https://demo.videowhisper.com/cam-recorder-html5-video-audio/)
 
 ![Cam/Mic Video/Audio Recorder HTML5](/snapshots/h5v-video-recorder.jpg)
 
@@ -10,10 +10,19 @@ Before installing, test the simple setup in the live demo:
 
 This edition implements audio / video recording in an instant recording booth.
 
-### Simple PHP Edition Features: Cam Recorder HTML5
+### Standalone PHP Edition Features: Cam Recorder HTML5
  * [x] Instant recording booth
  * [x] Access recorder with a button
  * [x] List recordings (video, audio)
+
+### Video/Audio Recorder HTML5  Features
+ * [x] Toggle Audio/Video recording mode
+ * [x] Select Microphone, Camera, Resolution
+ * [x] Playback recording
+ * [x] Discard and start recording again if needed
+ * [x] Download recording
+ * [x] Send (upload) recording to server
+ * [x] 100% web based in all major HTML5 browsers
 
 ### Installation Instructions  
 Requirements: Regular web hosting with PHP. Recording does not involve live streaming requirements. This edition does not implement conversions.
