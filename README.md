@@ -39,8 +39,8 @@ Requirements: Regular web hosting with PHP. Recording does not involve live stre
 Scripts also contain comments for clarifications/suggestions. 
 
 ### VideoWhisper HTML5 Project Demos
- * [Video Call - HTML5 Videochat](https://demo.videowhisper.com/videocall-html5-videochat/)
- * [Live Streaming - HTML5 Videochat](https://demo.videowhisper.com/html5-videochat/)
+ * [Video Call - HTML5 Videochat](https://demo.videowhisper.com/videocall-html5-videochat-php/)
+ * [Live Streaming - HTML5 Videochat](https://demo.videowhisper.com/html5-videochat-php/)
  * [Cam/Mic Recorder HTML5](https://demo.videowhisper.com/cam-recorder-html5-video-audio/)
  
  ### VideoWhisper HTML5 Project on GitHub

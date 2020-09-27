@@ -83,7 +83,7 @@ if (file_exists($directory))
 This edition implements audio / video recording in an instant recording booth.
 <br> + Official Live Demo: <a href="https://demo.videowhisper.com/cam-recorder-html5-video-audio/">Cam Recorder HTML5 Video Audio - Plain PHP - Live Demo</a>
 <br> + Download: <a href="https://github.com/videowhisper/Cam-Recorder-HTML5-Video-Audio">GitHub: Cam Recorder HTML5 Video Audio </a>
-<br> + All HTML5 Feature Demos: <a href="https://demo.videowhisper.com/videocall-html5-videochat/">Video Call</a> | <a href="https://demo.videowhisper.com/html5-videochat/">Live Streaming</a> | <a href="https://demo.videowhisper.com/cam-recorder-html5-video-audio/">Cam/Mic Recorder</a>
+<br> + All HTML5 Feature Demos: <a href="https://demo.videowhisper.com/videocall-html5-videochat-php/">Video Call</a> | <a href="https://demo.videowhisper.com/html5-videochat-php/">Live Streaming</a> | <a href="https://demo.videowhisper.com/cam-recorder-html5-video-audio/">Cam/Mic Recorder</a>
 <br> + Compatible hosting for all features including live streaming servers and video tools: <a href="https://webrtchost.com/hosting-plans/">WebRTC Host</a>
 <br> + Technical support: <a href="https://videowhisper.com/tickets_submit.php">VideoWhisper.com</a>
 <br> + Turnkey Cam Site Solution: <a href="https://paidvideochat.com/html5-videochat/">Turnkey HTML5 Videochat Site</a> - Advanced capabilities (including video conferencing, collaboration, tips, pay per minute, advanced tabbed interface, 2 way videocalls / shows requested from group broadcast), available as WordPress plugin with full php source.
