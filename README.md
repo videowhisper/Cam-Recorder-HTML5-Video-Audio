@@ -48,13 +48,16 @@ Requirements: Regular web hosting with PHP. Recording does not involve live stre
 Scripts also contain comments for clarifications/suggestions. 
 
 ### VideoWhisper HTML5 Project Demos
- * [Video Call - HTML5 Videochat](https://demo.videowhisper.com/videocall-html5-videochat-php/)
- * [Live Streaming - HTML5 Videochat](https://demo.videowhisper.com/html5-videochat-php/)
- * [Cam/Mic Recorder HTML5](https://demo.videowhisper.com/cam-recorder-html5-video-audio/)
- 
- ### VideoWhisper HTML5 Project on GitHub
- * [Video Call - HTML5 Videochat](https://github.com/videowhisper/VideoCall-HTML5-Videochat-PHP)
- * [Live Streaming - HTML5 Videochat](https://github.com/videowhisper/HTML5-Videochat-PHP)
- * [Cam/Mic Recorder HTML5](https://github.com/videowhisper/Cam-Recorder-HTML5-Video-Audio)
+ * [Video Call - HTML5 Videochat - Standalone](https://demo.videowhisper.com/videocall-html5-videochat-php/)
+ * [Live Streaming - HTML5 Videochat - Standalone](https://demo.videowhisper.com/html5-videochat-php/)
+ * [Cam/Mic Recorder HTML5 - Standalone](https://demo.videowhisper.com/cam-recorder-html5-video-audio/)
+ * [PaidVideochat Turnkey Site](https://paidvideochat.com/demo/)
+
+ ### VideoWhisper HTML5 Project Downloads
+ * [Video Call - HTML5 Videochat - GitHub](https://github.com/videowhisper/VideoCall-HTML5-Videochat-PHP)
+ * [Live Streaming - HTML5 Videochat - GitHub](https://github.com/videowhisper/HTML5-Videochat-PHP)
+ * [Cam/Mic Recorder HTML5 - GitHub](https://github.com/videowhisper/Cam-Recorder-HTML5-Video-Audio)
+ * [PaidVideochat Turnkey Site - WordPress](https://wordpress.org/plugins/ppv-live-webcams/)
+
 
 For a free consultation, [Contact VideoWhisper Technical Support](https://videowhisper.com/tickets_submit.php).
