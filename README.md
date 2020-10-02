@@ -28,8 +28,8 @@ This edition implements audio / video recording in an instant recording booth.
 Requirements: Regular web hosting with PHP. Recording does not involve live streaming requirements. This edition does not implement conversions.
 
  1. Deploy files to your web installation location. (Example: yoursite.domain/cam-recorder-html5-video-audio/)
- 2. If you don't have SuPHP, enable write permissions (0777) for folder "uploads", required to save session and chat info.
-
+ 2. If you don't have SuPHP, enable write permissions (0777) for folder "uploads", where videos will be uploaded in booth folder.
+ 
 ### Compatible Turnkey Hosting with Free Installation
 * [Live Streaming Hosting](https://webrtchost.com/hosting-plans/) - includes live streaming servers, web hosting with video conversion
 * [Video Hosting](https://videosharevod.com/hosting/) - web hosting with video conversions
