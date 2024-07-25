@@ -8,7 +8,7 @@ include_once('settings.php');
 
 $roomID = intval($_GET['r']);
 
-if (!$roomID) 
+if (!$roomID)
 {
 $roomID = rand(9000, 9999);
 $isPerformer = 1;
@@ -23,11 +23,11 @@ $isPerformer = 0;
 $sessionID = $userID;
 $sessionKey = $userID;
 
-//setcookie('userID', $userID); 
+//setcookie('userID', $userID);
 
 
 //embed the app: all integrations should contain this part
-$dataCode .= "window.VideoWhisper = {userID: $userID, sessionID: $sessionID, sessionKey: '$sessionKey', roomID: $roomID, performer: $isPerformer, serverURL: '" . VW_H5V_CALL . "'}";
+$dataCode .= "window.VideoWhisper = {userID: $userID, sessionID: $sessionID, sessionKey: '$sessionKey', modeVersion: '', roomID: $roomID, performer: $isPerformer, serverURL: '" . VW_H5V_CALL . "'}";
 
 $bodyCode .= <<<HTMLCODE
 <!--VideoWhisper.com - HTML5 Videochat web app - uid:$userID p:$isPerformer s:$sessionID-->
