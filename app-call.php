@@ -16,8 +16,8 @@ if ($VideoWhisper = $_POST['VideoWhisper'])
 	$roomID = intval($VideoWhisper['roomID']);
 	$sessionKey = intval($VideoWhisper['sessionKey']);
 
-	$privateUID = intval($VideoWhisper['privateUID']);
-	$roomActionID = intval($VideoWhisper['roomActionID']);
+	$privateUID = intval($VideoWhisper['privateUID'] ?? 0);
+	$roomActionID = intval($VideoWhisper['roomActionID'] ?? 0);
 }
 
 $response['VideoWhisper'] = 'https://videowhisper.com';
@@ -52,13 +52,13 @@ if ($task == 'login')
 
 	//config params, const
 	$response['config'] = [
-	'wss' => $options['wsURLWebRTC'],
-	'application' => $options['applicationWebRTC'],
+	'wss' => $options['wsURLWebRTC'] ?? '',
+	'application' => $options['applicationWebRTC'] ?? '',
 
-	'videoCodec' =>  $options['webrtcVideoCodec'],
-	'videoBitrate' =>  $options['webrtcVideoBitrate'],
-	'audioBitrate' =>  $options['webrtcAudioBitrate'],
-	'audioCodec' =>  $options['webrtcAudioCodec'],
+	'videoCodec' =>  $options['webrtcVideoCodec'] ?? '',
+	'videoBitrate' =>  $options['webrtcVideoBitrate'] ?? 0,
+	'audioBitrate' =>  $options['webrtcAudioBitrate'] ?? 0,
+	'audioCodec' =>  $options['webrtcAudioCodec'] ?? '',
 	'autoBroadcast' => false,
 	'actionFullscreen' => true,
 	'actionFullpage' => false,
@@ -88,8 +88,8 @@ if ($task == 'login')
 
 				}
 
-			if (!$isPerformer) $response['config']['cameraAutoBroadcast'] = '0';
-			
+			if (!isset($isPerformer)) $response['config']['cameraAutoBroadcast'] = '0';
+
 			//$response['config']['devMode '] = '1';
 			$response['config']['loaded'] = true;
 
@@ -118,7 +118,7 @@ case 'tick':
 
 case 'options':
 	break;
-	
+
 case 'update':
 	break;
 
@@ -130,7 +130,7 @@ case 'recorder_upload':
 	if (strstr($filename, ".php")) appFail('Bad uploader!');
 
 
-	$mode = $_POST['mode'];		// audio/video	
+	$mode = $_POST['mode'];		// audio/video
 	$scenario = $_POST['scenario'];	 // standalone/chat
 
 	if (!$privateUID)  $privateUID = 0; //public room
