@@ -3,28 +3,8 @@
 
 include_once('settings.php');
 
-//access existing room or create a new one as performer
-//all IDs generated randomly for demonstrative purposes; on integrations should be from database
-
-$roomID = intval($_GET['r'] ?? 0);
-
-if (!$roomID)
-{
-$roomID = rand(9000, 9999);
-$isPerformer = 1;
-$userID = 10000 + $roomID;
-}
-else
-{
-$userID = rand(9000, 9999);
-$isPerformer = 0;
-}
-
-$sessionID = $userID;
-$sessionKey = $userID;
-
-//setcookie('userID', $userID);
-
+require_once __DIR__ . '/demo-security.php';
+[$roomID, $userID, $sessionID, $sessionKey, $isPerformer] = demo_page_session('record');
 
 //embed the app: all integrations should contain this part
 $dataCode = "window.VideoWhisper = {userID: $userID, sessionID: $sessionID, sessionKey: '$sessionKey', modeVersion: '', roomID: $roomID, performer: $isPerformer, serverURL: '" . VW_H5V_CALL . "'}";
@@ -37,7 +17,7 @@ $bodyCode = <<<HTMLCODE
 HTMLCODE;
 
 //app requires semantic ui
-$headCode = '<link href="//cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" rel="stylesheet" type="text/css">';
+$headCode = '<link href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" rel="stylesheet" type="text/css">';
 
 //app css & js
 $CSSfiles = scandir(dirname(  __FILE__ ) . '/static/css/');
@@ -52,7 +32,7 @@ foreach ($JSfiles as $filename)
 
 
 //room link
-$roomURL = $_SERVER['REQUEST_SCHEME'] .'://'. $_SERVER['HTTP_HOST'] . dirname(explode('?', $_SERVER['REQUEST_URI'], 2)[0]) . '/?r=' . $roomID;
+$roomURL = demo_room_url($roomID);
 $bodyCode .= '<div class="ui segment"><h4 class="ui header">Booth URL</h4>Review or record videos at this address:<br>' . $roomURL .'</div>';
 ?>
 <head>

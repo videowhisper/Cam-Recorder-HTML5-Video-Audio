@@ -8,28 +8,24 @@ include_once 'settings.php';
 
 include_once 'app-functions.php';
 
-//session info received trough VideoWhisper POST var
-if ($VideoWhisper = $_POST['VideoWhisper'])
-{
-	$userID = intval($VideoWhisper['userID']);
-	$sessionID = intval($VideoWhisper['sessionID']);
-	$roomID = intval($VideoWhisper['roomID']);
-	$sessionKey = intval($VideoWhisper['sessionKey']);
-
-	$privateUID = intval($VideoWhisper['privateUID'] ?? 0);
-	$roomActionID = intval($VideoWhisper['roomActionID'] ?? 0);
-}
-
-$response['VideoWhisper'] = 'https://videowhisper.com';
-
-
-$task = $_POST['task'];
-
-
-if ($task != 'login')
-{
-	//verify user login, session validty
-}
+require_once __DIR__ . '/demo-security.php';
+header('Content-Type: application/json; charset=utf-8');
+header('Cache-Control: no-store');
+header('X-Content-Type-Options: nosniff');
+if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') demo_json(['error'=>'POST required.'], 405);
+$VideoWhisper = $_POST['VideoWhisper'] ?? null;
+if (!is_array($VideoWhisper)) demo_json(['error'=>'Session required.'], 403);
+$proof = demo_validate_request($VideoWhisper);
+$userID = $proof['user']; $sessionID = $proof['session'];
+$roomID = (int)$VideoWhisper['roomID']; $sessionKey = $proof['key'];
+$isPerformer = $proof['owner']; $privateUID = 0; $roomActionID = 0;
+$response = ['VideoWhisper'=>'https://videowhisper.com'];
+$task = is_string($_POST['task'] ?? null) ? $_POST['task'] : '';
+$userName = (($userID>10000)?'Performer':'User') . $userID;
+if ($task === 'socket_auth') demo_json(['vwsAuth'=>demo_pin($userName, $options)]);
+// Serialize each room's read/modify/write chat updates across browser sessions.
+$roomLock = fopen(demo_state_dir() . '/' . $roomID . '.lock', 'c');
+if (!$roomLock || !flock($roomLock, LOCK_EX)) demo_json(['error'=>'Room unavailable.'], 503);
 
 if ($task == 'login')
 {
@@ -39,6 +35,7 @@ if ($task == 'login')
 	'ID'=> intval($userID),
 	'name'=> (($userID>10000)?'Performer':'User') . $userID,
 	'sessionID'=> intval($sessionID),
+	'sessionKey'=> $sessionKey,
 	'loggedIn' => true,
 	'balance' => 100,
 	'avatar' => VW_H5V_URL .'images/avatar.png',
@@ -64,13 +61,14 @@ if ($task == 'login')
 	'actionFullpage' => false,
 
 	'serverURL' =>  VW_H5V_CALL,
+	'vwsAuth' => ['account'=>''],
 
 	];
 
 	$response['config']['text'] = appText(); //translations
 	$response['config']['sfx'] = appSfx();
 
-	$roomURL = $_SERVER['REQUEST_SCHEME'] .'://'. $_SERVER['HTTP_HOST'] . dirname(explode('?', $_SERVER['REQUEST_URI'], 2)[0]) . '/?r=' . $roomID;
+	$roomURL = demo_room_url($roomID);
 	$response['config']['exitURL'] = $roomURL;
 
 	//pass app setup config parameters
@@ -124,73 +122,7 @@ case 'update':
 
 
 case 'recorder_upload':
-
-
-	if (!$roomName) appFail('No room for recording.');
-	if (strstr($filename, ".php")) appFail('Bad uploader!');
-
-
-	$mode = $_POST['mode'];		// audio/video
-	$scenario = $_POST['scenario'];	 // standalone/chat
-
-	if (!$privateUID)  $privateUID = 0; //public room
-
-	//generate same private room folder for both users
-	if ($privateUID)
-	{
-		if ($isPerformer) $proom = $userID . "_" . $privateUID; //performer id first
-		else $proom = $privateUID ."_". $userID;
-	}
-
-	$destination = 'uploads';
-	if (!file_exists($destination)) mkdir($destination);
-
-	$destination.="/$roomName";
-	if (!file_exists($destination)) mkdir($destination);
-
-	if ($proom)
-	{
-		$destination.="/$proom";
-		if (!file_exists($destination)) mkdir($destination);
-	}
-
-	$response['_FILES'] = $_FILES;
-
-
-	$allowed = array('mp3', 'ogg', 'opus', 'mp4', 'webm');
-
-	$uploads = 0;
-	$filename = '';
-
-	if ($_FILES) if (is_array($_FILES))
-			foreach ($_FILES as $ix => $file)
-			{
-
-				$filename = filter_var( $file['name'], FILTER_SANITIZE_STRING);
-
-				$ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
-				$response['uploadRecLastExt'] = $ext;
-				$response['uploadRecLastF'] = $filename;
-
-				$filepath = $destination . '/' . $filename;
-
-				if (in_array($ext, $allowed))
-					if (file_exists($file['tmp_name']))
-					{
-						move_uploaded_file($file['tmp_name'], $filepath);
-						$response['uploadRecLast'] = $destination . $filename;
-						$uploads++;
-					}
-			}
-
-		$response['uploadCount'] = $uploads;
-
-
-	if (!file_exists($filepath))
-	{
-		$response['warning'] = 'Recording upload failed!';
-	}
-
+	$response = array_merge($response, demo_upload($roomName));
 	break;
 
 default:
@@ -205,6 +137,9 @@ $response['timestamp'] = $ztime; //update time
 $response['lastMessageID'] = 0;
 $response['roomUpdate']['users'] = [];
 
+
+// Never permit appSetup overrides to expose an account-level credential.
+unset($response['config']['vwsToken'], $response['config']['token']);
 
 //send response to app
 echo json_encode($response);

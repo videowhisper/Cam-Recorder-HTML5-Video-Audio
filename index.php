@@ -3,34 +3,16 @@
 
 include_once 'settings.php';
 
-//access existing room or create a new one as performer
-//all IDs generated randomly for demonstrative purposes; on integrations should be from database
+require_once __DIR__ . '/demo-security.php';
+[$roomID, $userID, $sessionID, $sessionKey, $isPerformer] = demo_page_session('record');
 
-$roomID = intval($_GET['r'] ?? 0);
-
-if (!$roomID)
-{
-	$roomID = rand(9000, 9999);
-	$isPerformer = 1;
-	$userID = 10000 + $roomID;
-}
-else
-{
-	$userID = rand(9000, 9999);
-	$isPerformer = 0;
-}
-
-$sessionID = $userID;
-$sessionKey = $userID;
-
-
-$headCode = '<link href="//cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" rel="stylesheet" type="text/css">';
+$headCode = '<link href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" rel="stylesheet" type="text/css">';
 
 
 
 //room link
-$roomURL = $_SERVER['REQUEST_SCHEME'] .'://'. $_SERVER['HTTP_HOST'] . explode('?', $_SERVER['REQUEST_URI'], 2)[0] . '?r=' . $roomID;
-$recorderURL = $_SERVER['REQUEST_SCHEME'] .'://'. $_SERVER['HTTP_HOST'] . explode('?', $_SERVER['REQUEST_URI'], 2)[0] . 'recorder.php?r=' . $roomID;
+$roomURL = demo_room_url($roomID);
+$recorderURL = demo_room_url($roomID, 'recorder.php');
 
 $bodyCode = '<div class="ui segment"><div class="ui header">Cam Recorder HTML5</div><a class="ui button" href="'.$recorderURL.'">Video &amp; Audio Recorder</a><br> <small>Open Recorder: Enable webcam/microphone, Start recording and Send to upload.</small></div>';
 $bodyCode .= '<div class="ui segment"><h4 class="ui header">Recording Booth URL</h4>Record and review video/audio at this recording room address:<br>' . $roomURL .'</div>';
@@ -58,7 +40,8 @@ if (file_exists($directory))
 		{
 			$ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
 
-			$url = path2url($directory . '/' .  $file);
+			$url = htmlspecialchars($directory . '/' . rawurlencode($file), ENT_QUOTES, 'UTF-8');
+			$file = htmlspecialchars($file, ENT_QUOTES, 'UTF-8');
 
 			$bodyCode .=  '<div class="ui segment">';
 
@@ -79,16 +62,17 @@ if (file_exists($directory))
 </head>
 <body>
 <?php echo $bodyCode ?>
-<div class="ui segment"><h4 class="ui header">Cam/Mic Recorder HTML5 - Plain PHP</h4>This is a simple embedding preview edition, with simple scripts to embed app and showcase few features.
+<div class="ui warning message">Public demo: use test recordings only. Accepted uploads are visible to anyone with the booth or file URL. Each file is limited to 25 MB; operator cleanup controls retention. For a download-only recorder, use <a href="https://demo.videowhisper.com/webcam-microphone-screen-recorder/">the current recorder</a>.</div><div class="ui segment"><h4 class="ui header">Cam/Mic Recorder HTML5 - Plain PHP</h4>This is a simple embedding preview edition, with simple scripts to embed app and showcase few features.
 This edition implements audio / video recording in an instant recording booth.
 <br> + Official Live Demo: <a href="https://demo.videowhisper.com/cam-recorder-html5-video-audio/">Cam Recorder HTML5 Video Audio - Plain PHP - Live Demo</a>
 <br> + Download: <a href="https://github.com/videowhisper/Cam-Recorder-HTML5-Video-Audio">GitHub: Cam Recorder HTML5 Video Audio </a>
 <br> + All HTML5 Feature Demos: <a href="https://demo.videowhisper.com/videocall-html5-videochat-php/">Video Call</a> | <a href="https://demo.videowhisper.com/html5-videochat-php/">Live Streaming</a> | <a href="https://demo.videowhisper.com/cam-recorder-html5-video-audio/">Cam/Mic Recorder</a>
 <br> + Compatible hosting for all features including live streaming servers and video tools: <a href="https://webrtchost.com/hosting-plans/">WebRTC Host</a>
-<br> + Technical support: <a href="https://videowhisper.com/tickets_submit.php">VideoWhisper.com</a>
+<br> + Technical support: <a href="https://consult.videowhisper.com/">VideoWhisper.com</a>
 <br> + Turnkey Cam Site Solution: <a href="https://paidvideochat.com/html5-videochat/">Turnkey HTML5 Videochat Site</a> - Advanced capabilities (including video conferencing, collaboration, tips, pay per minute, advanced tabbed interface, 2 way videocalls / shows requested from group broadcast), available as WordPress plugin with full php source.
 </div>
 
 <?php
-include_once 'clean_older.php'?>
+// Recording cleanup runs from the documented operator job.
+?>
 </body>

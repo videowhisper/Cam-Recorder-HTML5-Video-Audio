@@ -6,29 +6,23 @@
 //https://plugins.svn.wordpress.org/ppv-live-webcams/trunk/inc/h5videochat.php 
 
 
-//demo setup saves variables in plain files in uploads folder: integration should use framework database
+require_once __DIR__ . '/demo-security.php';
+function demo_state_path($path) {
+    if (!is_string($path) || !preg_match('/^[0-9]+_(sessions|room|messages)$/D', $path)) throw new RuntimeException('Invalid state key.');
+    return demo_state_dir() . '/' . $path;
+}
+function varSave($path, $var) {
+    if (is_array($var) && str_ends_with($path, '_messages') && count($var) > 200) $var = array_slice($var, -200, null, true);
+    if (file_put_contents(demo_state_path($path), serialize($var), LOCK_EX) === false) throw new RuntimeException('Cannot save demo state.');
+    chmod(demo_state_path($path), 0600);
+}
+function varLoad($path) {
+    $file = demo_state_path($path);
+    if (!is_file($file) || is_link($file) || filesize($file) > 2*1024*1024) return false;
+    return unserialize(file_get_contents($file), ['allowed_classes'=>false]);
+}
+function arrayLoad($path) { $value = varLoad($path); return is_array($value) ? $value : []; }
 
-		function varSave($path, $var)
-		{
-			if (!file_exists('uploads')) mkdir('uploads');
-			file_put_contents('uploads/' . $path, serialize($var));
-		}
-
-		function varLoad($path)
-		{
-			if (!file_exists('uploads/' . $path)) return false;
-
-			return unserialize(file_get_contents('uploads/' . $path));
-		}
-		
-		function arrayLoad($path)
-		{
-			$res = varLoad($path);
-			
-			if (is_array($res)) return $res;
-			else return array();
-		}
-		
 // app parameter functions
 
 	function __(  $text,  $domain = 'default' )
@@ -111,7 +105,7 @@ function appPublicRoom($roomID, $userID, $options, $welcome ='')
 	//custom buttons
 	$actionButtons = array();
 
-	$roomURL = $_SERVER['REQUEST_SCHEME'] .'://'. $_SERVER['HTTP_HOST'] . dirname(explode('?', $_SERVER['REQUEST_URI'], 2)[0]) . '/?r=' . $roomID;
+	$roomURL = demo_room_url($roomID);
 
 
 	//_ will be added to target
