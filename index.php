@@ -58,6 +58,7 @@ if (file_exists($directory))
 
 ?>
 <head>
+<meta charset="UTF-8">
 <?php echo $headCode ?>
 </head>
 <body>
